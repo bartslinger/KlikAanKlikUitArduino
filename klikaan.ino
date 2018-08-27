@@ -1,3 +1,9 @@
+char CH1_ON[]  = "221322132122232221223222132132212";
+char CH1_OFF[] = "221322132122232221223222132222212";
+
+char CH2_ON[]  = "221322132122232221223222132132222";
+char CH2_OFF[] = "221322132122232221223222132222222";
+
 char CH3_ON[]  = "221322132122232221223222132132131";
 char CH3_OFF[] = "221322132122232221223222132222131";
 
@@ -6,14 +12,46 @@ void setup() {
   pinMode(13, OUTPUT);
   digitalWrite(13, LOW);
   Serial.begin(9600);
+  Serial1.begin(9600);
+}
+
+void parseChar(char c) {
+  switch(c) {
+      case '1':
+        sendCommand(CH1_ON);
+        break;
+      case '2':
+        sendCommand(CH2_ON);
+        break;
+      case '3':
+        sendCommand(CH3_ON);
+        break;
+      case '4':
+        sendCommand(CH1_OFF);
+        break;
+      case '5':
+        sendCommand(CH2_OFF);
+        break;
+      case '6':
+        sendCommand(CH3_OFF);
+        break;
+    }
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  delay(200);
-  sendCommand(CH3_ON);
-  delay(200);
-  sendCommand(CH3_OFF);
+  //delay(2000);
+  //sendCommand(CH1_ON);
+  //delay(2000);
+  //sendCommand(CH1_OFF);
+  if (Serial.available() > 0) {
+    char c = Serial.read();
+    parseChar(c);
+  }
+  if (Serial1.available() > 0) {
+    char c = Serial1.read();
+    parseChar(c);
+  }
 }
 
 void sendCommand(char* command){
